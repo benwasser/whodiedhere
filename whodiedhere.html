@@ -1,0 +1,113 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+		<script src="/socket.io/socket.io.js"></script>
+		<style>
+			body {
+				padding-left:120px;
+				padding-top: 75px;
+				font-family: Helvetica, Arial, sans-serif;
+				font-weight: 100;
+			}
+			h1 {
+				font-size: 30px;
+				font-weight: 100;
+			}
+			.arrow_box {
+				position: relative;
+				background: #fff;
+				border: 1px solid #000000;
+				font-size:14px;
+				width: 430px;
+				text-align: justify;
+				height: 115px;
+				padding: 17px;
+				-webkit-border-top-left-radius:5px ;
+				-webkit-border-top-right-radius:5px ;
+				-webkit-border-bottom-right-radius:5px ;
+				-webkit-border-bottom-left-radius:5px ;
+				-khtml-border-top-left-radius:5px ;
+				-khtml-border-top-right-radius:5px ;
+				-khtml-border-bottom-right-radius:5px ;
+				-khtml-border-bottom-left-radius:5px ;
+				-moz-border-radius-topleft:5px ;
+				-moz-border-radius-topright:5px ;
+				-moz-border-radius-bottomright:5px ;
+				-moz-border-radius-bottomleft:5px ;
+				border-top-left-radius:5px ;
+				border-top-right-radius:5px ;
+				border-bottom-right-radius:5px ;
+				border-bottom-left-radius:5px ;
+			}
+			.arrow_box:after, .arrow_box:before {
+				right: 100%;
+				border: solid transparent;
+				content: " ";
+				height: 0;
+				width: 0;
+				position: absolute;
+				pointer-events: none;
+			}
+			.arrow_box:after {
+				border-right-color: #fff;
+				border-width: 15px;
+				top: 50%;
+				margin-top: -15px;
+			}
+			.arrow_box:before {
+				border-right-color: #000000;
+				border-width: 16px;
+				top: 50%;
+				margin-top: -16px;
+			}
+			.tooltip {
+				border-bottom: 1px dotted #000000;
+				color: #000000;
+				outline: none;
+				text-decoration: none;
+				position: relative;
+			}
+			.tooltip span {
+				margin-left: -999em;
+				position: absolute;
+			}
+			.tooltip:hover span {
+				position: absolute; left: 14em; top: -7em; z-index: 99;
+				margin-left: 0; 
+			}
+
+		</style>
+		<title>who died here</title>
+		<script type="text/javascript">
+			$(document).ready(function(){ //waits until everything loads
+				var socket = io.connect('/'); 
+				$("#searchterm").keyup(function(event){
+					if(event.keyCode == 13){ //checks for hitting enter
+						if ($('#searchterm').val() == ''){
+							alert('You\'ll have to be more specific than that');
+						} else {
+							socket.emit('search', $('#searchterm').val());
+						};
+					}
+				});
+
+				socket.on('results', function (data) {
+					$('#mainsection').html(data);
+				});
+			});
+		</script>
+	</head>
+	<body>
+		<div id="wrapper">
+			<a class="tooltip" href="/"><h1>who died here?</h1>
+			<span><div class='arrow_box'>
+				This site was created in response to the growing popular demand to know what famous person has died at any given location. Finally, you too can know exactly what celebrity or otherwise notable person met their maker where you're enjoying your family vacation. (Hint: was it Henry William Heisch?)<br /><br />iOS app and acquisition notice pending. <b>ben@whodiedhere.com</b>
+			</div></span></a>
+			<input id="searchterm" type="text" value="" size="36" placeholder="Enter a city, state, country, or name" /><br /><br /><br />
+			<div id="mainsection"> </div>
+		</div>
+	</body>
+</html>
